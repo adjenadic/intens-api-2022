@@ -1,5 +1,3 @@
-LABEL authors="adjenadic"
-
 FROM maven:3.9.6-jdk-8 AS builder
 
 ENV HOME=/usr/app
