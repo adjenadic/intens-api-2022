@@ -1,4 +1,4 @@
-FROM openjdk:8 AS builder
+FROM maven:3.9.6 AS builder
 
 ENV HOME=/usr/app
 RUN mkdir -p $HOME
