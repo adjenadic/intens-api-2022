@@ -1,0 +1,36 @@
+name: post-intens-api
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: aws-cred-setup
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+
+      - name: aws-ecr-login
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: docker-build
+        run: |
+          git clone https://github.com/adjenadic/intens-api-2022.git
+          cd intens-api-2022
+          docker build -f Dockerfile -t 975050262336.dkr.ecr.eu-north-1.amazonaws.com/intens:latest .
+          docker push 975050262336.dkr.ecr.eu-north-1.amazonaws.com/intens:latest
+
+      - name: aws-deploy
+        run: |
+          aws ecs update-service --cluster intens-cluster --service intens-cluster --force-new-deployment
