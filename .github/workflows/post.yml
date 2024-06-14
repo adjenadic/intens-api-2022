@@ -33,4 +33,4 @@ jobs:
 
       - name: aws-deploy
         run: |
-          aws ecs update-service --cluster intens-cluster --service intens-cluster --force-new-deployment
+          aws ecs update-service --cluster intens-cluster --service intens-service --force-new-deployment
